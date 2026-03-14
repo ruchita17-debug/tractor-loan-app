@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>🚜 Tractor Loan Calculator</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+h1{text-align:center;}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+background:#36d1dc;
+color:white;
+border:none;
+font-size:16px;
+}
+
+.result{
+margin-top:20px;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚜 Tractor Loan</h1>
+
+<label>Tractor Price (₹)</label>
+<input id="price" type="number">
+
+<label>Interest Rate (%)</label>
+<input id="rate" type="number">
+
+<label>Loan Years</label>
+<input id="years" type="number">
+
+<button onclick="calculate()">Calculate EMI</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<script>
+
+function calculate(){
+
+var price=parseFloat(document.getElementById("price").value);
+var rate=parseFloat(document.getElementById("rate").value)/100/12;
+var months=parseFloat(document.getElementById("years").value)*12;
+
+var emi=(price*rate*Math.pow(1+rate,months))/(Math.pow(1+rate,months)-1);
+
+document.getElementById("result").innerHTML="Monthly EMI: ₹ "+Math.round(emi);
+
+}
+
+</script>
+
+</body>
+</html>
