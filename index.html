@@ -3,18 +3,15 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>🚜 Tractor Loan Calculator</title>
-
-<link rel="manifest" href="manifest.json">
 
 <style>
 
 body{
 font-family:Arial;
 background:#f2f2f2;
-margin:0;
 padding:20px;
 }
 
@@ -24,10 +21,7 @@ margin:auto;
 background:white;
 padding:20px;
 border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
 }
-
-h1{text-align:center;}
 
 input{
 width:100%;
@@ -48,7 +42,6 @@ font-size:16px;
 
 .result{
 margin-top:20px;
-font-size:18px;
 }
 
 </style>
@@ -59,34 +52,90 @@ font-size:18px;
 
 <div class="container">
 
-<h1>🚜 Tractor Loan</h1>
+<h2>🚜 Tractor Loan Calculator</h2>
 
-<label>Tractor Price (₹)</label>
-<input id="price" type="number">
+<label>Invoice Amount</label>
+<input type="number" id="invoice">
+
+<label>Year of Manufacture</label>
+<input type="number" id="year">
+
+<button onclick="estimateLoan()">Estimate Loan Amount</button>
+
+<div class="result">
+
+<p id="age"></p>
+<p id="depreciation"></p>
+<p id="loanAmount"></p>
+
+</div>
+
+<div id="loanSection" style="display:none">
 
 <label>Interest Rate (%)</label>
-<input id="rate" type="number">
+<input type="number" id="rate">
 
 <label>Loan Years</label>
-<input id="years" type="number">
+<input type="number" id="years">
 
-<button onclick="calculate()">Calculate EMI</button>
+<button onclick="calculateEMI()">Calculate EMI</button>
 
-<div class="result" id="result"></div>
+</div>
+
+<div class="result">
+
+<p id="emi"></p>
+<p id="total"></p>
+<p id="interest"></p>
+
+</div>
 
 </div>
 
 <script>
 
-function calculate(){
+let loanValue=0;
 
-var price=parseFloat(document.getElementById("price").value);
-var rate=parseFloat(document.getElementById("rate").value)/100/12;
-var months=parseFloat(document.getElementById("years").value)*12;
+function estimateLoan(){
 
-var emi=(price*rate*Math.pow(1+rate,months))/(Math.pow(1+rate,months)-1);
+let invoice=parseFloat(document.getElementById("invoice").value);
+let year=parseInt(document.getElementById("year").value);
 
-document.getElementById("result").innerHTML="Monthly EMI: ₹ "+Math.round(emi);
+let currentYear=new Date().getFullYear();
+let age=currentYear-year;
+
+let depreciation=0;
+
+if(age==0) depreciation=0;
+else if(age==1) depreciation=20;
+else if(age==2) depreciation=25;
+else depreciation=25+(age-2)*5;
+
+let value=invoice-(invoice*(depreciation/100));
+
+loanValue=value*0.8;
+
+document.getElementById("age").innerHTML="Age: "+age+" years";
+document.getElementById("depreciation").innerHTML="Depreciation: "+depreciation+"%";
+document.getElementById("loanAmount").innerHTML="Estimated Loan: ₹ "+Math.round(loanValue);
+
+document.getElementById("loanSection").style.display="block";
+
+}
+
+function calculateEMI(){
+
+let rate=parseFloat(document.getElementById("rate").value)/100/12;
+let months=parseFloat(document.getElementById("years").value)*12;
+
+let emi=(loanValue*rate*Math.pow(1+rate,months))/(Math.pow(1+rate,months)-1);
+
+let total=emi*months;
+let interest=total-loanValue;
+
+document.getElementById("emi").innerHTML="Monthly EMI: ₹ "+Math.round(emi);
+document.getElementById("total").innerHTML="Total Payment: ₹ "+Math.round(total);
+document.getElementById("interest").innerHTML="Total Interest: ₹ "+Math.round(interest);
 
 }
 
